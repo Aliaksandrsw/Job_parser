@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for vacancy in vacancies %}
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ vacancy.title }}</h5>
+                        <h6
+                                class="card-subtitle mb-2 text-muted">{{ vacancy.company }}</h6>
+                        <p class="card-text">{{ vacancy.skills }}</p> <a href="#" class="card-link">Card link</a> <a
+                            href="#" class="card-link">Another link</a></div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
