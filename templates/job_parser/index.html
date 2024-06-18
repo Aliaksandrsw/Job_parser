@@ -1,22 +1,19 @@
 {% extends 'base.html' %}
 
-{% block title %}
-
-{% endblock %}
+{% block title %}Список вакансий {% endblock %}
 
 {% block content %}
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        {% for vacancy in vacancies %}
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ vacancy.title }}</h5>
-                        <h6
-                                class="card-subtitle mb-2 text-muted">{{ vacancy.company }}</h6>
-                        <p class="card-text">{{ vacancy.skills }}</p> <a href="#" class="card-link">Card link</a> <a
-                            href="#" class="card-link">Another link</a></div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+    {% for vacanci in vacancies %}
+        <h3 class="font-weight-light" style="font-weight: 350;">
+            <a href="{{ vacanci.url }}">
+                {{ vacanci.title }}
+            </a>
+        </h3>
+
+        <div class="text-muted fst-italic mb-2">
+            <h6>Опубликованно {{ vacanci.created }} от {{ vacanci.company }}</h6>
+        </div>
+        <div  class="mb-5">{{ vacanci.skills}}</div>
+    {% endfor %}
+    {% include "pagination.html" with page=page_obj %}
 {% endblock %}
