@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 
 
@@ -27,3 +28,26 @@ class Vacancy(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class FavoriteVacancy(models.Model):
+    class Status(models.TextChoices):
+        ACCEPTED = 'accepted', 'Принято'
+        REJECTED = 'rejected', 'Отклонено'
+
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='Пользователь')
+    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, verbose_name='Вакансия')
+    status = models.CharField(
+        max_length=10,
+        choices=Status.choices,
+        default=Status.ACCEPTED,
+        verbose_name='Статус'
+    )
+
+    class Meta:
+        unique_together = ('user', 'vacancy')
+        verbose_name = 'Избранная вакансия'
+        verbose_name_plural = 'Избранные вакансии'
+
+    def __str__(self):
+        return f"{self.user.username} - {self.vacancy.title} ({self.get_status_display()})"

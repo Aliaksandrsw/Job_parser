@@ -99,11 +99,11 @@ def habr_get_content(lst):
             lst_vacancy.append(data)
     return lst_vacancy
 
-# def main():
-#     url_lst = habr_get_all_url()
-#     content = habr_get_content(url_lst)
-#     print(content)
-#
-#
-# if __name__ == '__main__':
-#     main()
+def main():
+    url_lst = habr_get_all_url()
+    content = habr_get_content(url_lst)
+    print(content)
+
+
+if __name__ == '__main__':
+    main()

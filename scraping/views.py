@@ -11,4 +11,4 @@ class JobsView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Vacancy.objects.all()
+        return Vacancy.objects.all().order_by('-created')
