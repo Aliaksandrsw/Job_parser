@@ -1,9 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView
 
+from scraping.forms import FavoriteStatusForm
 from scraping.models import Vacancy, FavoriteVacancy
 
 
@@ -33,3 +36,16 @@ class FavoriteVacancyView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return FavoriteVacancy.objects.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = FavoriteStatusForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        favorite_id = request.POST.get('favorite_id')
+        favorite = FavoriteVacancy.objects.get(id=favorite_id, user=request.user)
+        form = FavoriteStatusForm(request.POST, instance=favorite)
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect(reverse('favorite-vacancy'))

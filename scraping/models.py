@@ -32,15 +32,15 @@ class Vacancy(models.Model):
 
 class FavoriteVacancy(models.Model):
     class Status(models.TextChoices):
-        ACCEPTED = 'accepted', 'Принято'
-        REJECTED = 'rejected', 'Отклонено'
+        SENT = 'Отправлено', 'Отправлено'
+        REJECTED = 'Отказ', 'Отказ'
+        ACCEPTED = 'Принято', 'Принято'
 
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='Пользователь')
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, verbose_name='Вакансия')
     status = models.CharField(
-        max_length=10,
         choices=Status.choices,
-        default=Status.ACCEPTED,
+        default=Status.SENT,
         verbose_name='Статус'
     )
 

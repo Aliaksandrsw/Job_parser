@@ -1,19 +1,39 @@
 {% extends 'base.html' %}
-
 {% block title %}Список избранных вакансий{% endblock %}
-
 {% block content %}
-    {% for favorite in favorite_vacancy %}
-        <h3 class="font-weight-light" style="font-weight: 350;">
-            <a href="{{ favorite.vacancy.url }}">
-                {{ favorite.vacancy.title }}
-            </a>
-        </h3>
 
-        <div class="text-muted fst-italic mb-2">
-            <h6>Опубликовано {{ favorite.vacancy.created }} от {{ favorite.vacancy.company }}</h6>
+<div class="container">
+  <div class="row">
+    {% for favorite in favorite_vacancy %}
+      <div class="col-12 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">
+              <a href="{{ favorite.vacancy.url }}" class="text-decoration-none">{{ favorite.vacancy.title }}</a>
+            </h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+              {{ favorite.vacancy.company }} | Опубликовано {{ favorite.vacancy.created }}
+            </h6>
+            <p class="card-text">{{ favorite.vacancy.skills }}</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <form method="post" class="d-flex align-items-center">
+                {% csrf_token %}
+                <input type="hidden" name="favorite_id" value="{{ favorite.id }}">
+                <div class="me-2">
+                  {{ form.status }}
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">Изменить статус</button>
+              </form>
+              <span class="badge bg-secondary">
+                Текущий статус: {{ favorite.get_status_display }}
+              </span>
+            </div>
+          </div>
         </div>
-        <div class="mb-5">{{ favorite.vacancy.skills }}</div>
+      </div>
     {% endfor %}
-    {% include "pagination.html" with page=page_obj %}
+  </div>
+</div>
+
+{% include "pagination.html" with page_obj=page_obj %}
 {% endblock %}
