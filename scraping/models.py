@@ -50,4 +50,4 @@ class FavoriteVacancy(models.Model):
         verbose_name_plural = 'Избранные вакансии'
 
     def __str__(self):
-        return f"{self.user.username} - {self.vacancy.title} ({self.get_status_display()})"
+        return self.vacancy.title

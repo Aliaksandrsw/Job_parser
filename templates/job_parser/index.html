@@ -13,6 +13,10 @@
         <div class="text-muted fst-italic mb-2">
             <h6>Опубликованно {{ vacanci.created }} от {{ vacanci.company }}</h6>
         </div>
+        <form action="{% url 'save_vacancy' vacanci.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Сохранить в избранное</button>
+        </form>
         <div  class="mb-5">{{ vacanci.skills}}</div>
     {% endfor %}
     {% include "pagination.html" with page=page_obj %}
