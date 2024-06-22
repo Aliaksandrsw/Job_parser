@@ -15,7 +15,11 @@
         </div>
         <form action="{% url 'save_vacancy' vacanci.id %}" method="post">
             {% csrf_token %}
+           {% if vacanci.id in favorite_vacancies %}
+            <button type="submit" class="btn btn-secondary" disabled>Вакансия в избранном</button>
+        {% else %}
             <button type="submit" class="btn btn-primary">Сохранить в избранное</button>
+        {% endif %}
         </form>
         <div  class="mb-5">{{ vacanci.skills}}</div>
     {% endfor %}

@@ -19,6 +19,14 @@ class JobsView(ListView):
     def get_queryset(self):
         return Vacancy.objects.all().order_by('-created')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            favorite_vacancies = FavoriteVacancy.objects.filter(user=self.request.user).values_list('vacancy_id',
+                                                                                                    flat=True)
+            context['favorite_vacancies'] = favorite_vacancies
+        return context
+
 
 class SaveVacancyView(LoginRequiredMixin, View):
     def post(self, request, vacancy_id):

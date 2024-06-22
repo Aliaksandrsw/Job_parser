@@ -19,11 +19,14 @@ class Vacancy(models.Model):
         choices=ProgrammingLanguages.choices,
         default=ProgrammingLanguages.PYTHON,
     )
-    created = models.CharField(max_length=100, verbose_name='Дата создания')
+    created = models.DateField(verbose_name='Дата создания')
 
     class Meta:
         verbose_name = 'Вакансия'
         verbose_name_plural = 'Вакансии'
+        indexes = [
+            models.Index(fields=['-created']),
+        ]
         ordering = ['-created']
 
     def __str__(self):
