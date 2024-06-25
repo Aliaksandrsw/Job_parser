@@ -1,12 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.postgres.search import SearchVector
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView
 
-from scraping.forms import FavoriteStatusForm
+from scraping.forms import FavoriteStatusForm, SearchForm
 from scraping.models import Vacancy, FavoriteVacancy
 
 
@@ -17,10 +18,19 @@ class JobsView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Vacancy.objects.all().order_by('-created')
+        queryset = Vacancy.objects.all().order_by('-created')
+        form = SearchForm(self.request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            if query:
+                queryset = queryset.annotate(
+                    search=SearchVector('skills'),
+                ).filter(search=query)
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['form'] = SearchForm(self.request.GET)
         if self.request.user.is_authenticated:
             favorite_vacancies = FavoriteVacancy.objects.filter(user=self.request.user).values_list('vacancy_id',
                                                                                                     flat=True)

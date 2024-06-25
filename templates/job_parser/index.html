@@ -3,6 +3,13 @@
 {% block title %}Список вакансий {% endblock %}
 
 {% block content %}
+    <h3>Поиск вакансий</h3>
+    <form method="get" action="{% url 'jobs-view' %}" class="mb-8">
+        <div class="input-group">
+            {{ form.query }}
+            <button type="submit" class="btn btn-primary">Поиск</button>
+        </div>
+    </form>
     {% for vacanci in vacancies %}
         <h3 class="font-weight-light" style="font-weight: 350;">
             <a href="{{ vacanci.url }}">
