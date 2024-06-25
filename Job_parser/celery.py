@@ -13,7 +13,11 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.beat_schedule = {
     'parse_habr_vacancies_hourly': {
         'task': 'scraping.tasks.parse_job_vacancies',
-        'schedule': crontab(minute='*')
+        'schedule': crontab(minute='0', hour='*/12')
+    },
+    'parse_geekjob_vacancies_hourly': {
+        'task': 'scraping.tasks.parse_geekjob_vacancies',
+        'schedule': crontab(minute='0', hour='*/12')
     }
 }
 

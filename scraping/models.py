@@ -13,7 +13,7 @@ class Vacancy(models.Model):
     url = models.URLField(unique=True, verbose_name='URL')
     title = models.CharField(max_length=250, verbose_name='Заголовок')
     company = models.CharField(max_length=250, verbose_name='Компания')
-    skills = models.TextField()
+    skills = models.TextField(default='Python', verbose_name='Навыки')
     primary_language = models.CharField(
         max_length=20,
         choices=ProgrammingLanguages.choices,

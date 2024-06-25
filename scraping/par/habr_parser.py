@@ -57,10 +57,6 @@
 
 import requests
 from bs4 import BeautifulSoup
-import os
-import django
-
-
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
@@ -73,7 +69,7 @@ URL = 'https://career.habr.com/vacancies?q=python&type=all'
 
 
 def habr_get_html(url):
-    response = requests.get(url, headers=headers,timeout=2)
+    response = requests.get(url, headers=headers, timeout=2)
     return response.text
 
 
@@ -98,6 +94,7 @@ def habr_get_content(lst):
             }
             lst_vacancy.append(data)
     return lst_vacancy
+
 
 def main():
     url_lst = habr_get_all_url()
