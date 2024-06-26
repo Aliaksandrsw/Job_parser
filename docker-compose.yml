@@ -1,0 +1,60 @@
+version: '3.8'
+name: job_parser
+
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - 127.0.0.1:8000:8000
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    volumes:
+     - postgres-data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+
+  redis:
+    image: redis:6.2.6
+    ports:
+      - "6379:6379"
+
+  celery:
+    build: .
+    command: celery -A Job_parser worker -P eventlet --loglevel=info
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+
+
+  celery-beat:
+    build: .
+    command: celery -A Job_parser beat --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+
+volumes:
+  postgres-data:
