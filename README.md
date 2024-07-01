@@ -12,6 +12,7 @@
 - PostgreSQL
 - Redis (в качестве брокера сообщений для Celery)
 - Docker
+- Django REST framework 
 - Docker Compose
 - Requests
 - BeautifulSoup
