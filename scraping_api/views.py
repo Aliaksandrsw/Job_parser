@@ -17,6 +17,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 class PostList(generics.ListCreateAPIView):
     queryset = Vacancy.objects.all()
     serializer_class = VacancySerializer
+    permission_classes = (IsAdminOrReadOnly,)
     pagination_class = StandardResultsSetPagination
 
 

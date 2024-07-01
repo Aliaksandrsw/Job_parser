@@ -8,11 +8,10 @@ from django.utils import timezone
 
 class VacancyAPITests(APITestCase):
     def setUp(self):
-        # Создаем тестового пользователя и админа
+        super().setUp()
         self.user = User.objects.create_user(username='testuser', password='12345')
         self.admin = User.objects.create_superuser(username='admin', password='admin123', email='admin@example.com')
 
-        # Создаем тестовую вакансию
         self.vacancy = Vacancy.objects.create(
             url='http://example.com',
             title='Test Vacancy',
@@ -23,6 +22,7 @@ class VacancyAPITests(APITestCase):
         )
 
     def test_list_vacancies(self):
+        self.client.force_authenticate(user=self.user)
         url = reverse('post_list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -36,7 +36,7 @@ class VacancyAPITests(APITestCase):
             'company': 'New Company',
             'skills': 'JavaScript, React',
             'primary_language': Vacancy.ProgrammingLanguages.JAVASCRIPT,
-            'created': timezone.now().date().isoformat()  # Явно устанавливаем дату
+            'created': timezone.now().date().isoformat()
         }
         self.client.force_authenticate(user=self.admin)
         response = self.client.post(url, data)
@@ -79,7 +79,6 @@ class VacancyAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_pagination(self):
-        # Создаем 25 вакансий
         for i in range(25):
             Vacancy.objects.create(
                 url=f'http://example{i}.com',
@@ -91,9 +90,9 @@ class VacancyAPITests(APITestCase):
             )
 
         url = reverse('post_list')
-        self.client.force_authenticate(user=self.user)  # Аутентифицируем пользователя
+        self.client.force_authenticate(user=self.user)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['results']), 20)  # page_size в пагинации
+        self.assertEqual(len(response.data['results']), 20)
         self.assertIsNotNone(response.data['next'])
         self.assertIsNone(response.data['previous'])

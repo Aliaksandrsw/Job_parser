@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 
+
 class Vacancy(models.Model):
     class ProgrammingLanguages(models.TextChoices):
         PYTHON = 'python', 'Python'
@@ -19,7 +20,7 @@ class Vacancy(models.Model):
         choices=ProgrammingLanguages.choices,
         default=ProgrammingLanguages.PYTHON,
     )
-    created = models.DateField(verbose_name='Дата создания')
+    created = models.DateField(verbose_name='Дата создания', null=True)
 
     class Meta:
         verbose_name = 'Вакансия'
